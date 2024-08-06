@@ -1,5 +1,6 @@
 .git
 .gitignore
+.idea
 
 # Переменные окружения
 .env.local

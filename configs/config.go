@@ -5,38 +5,35 @@ import (
 	"os"
 )
 
-const configFilePath = "configs/config.json"
-
 type Config struct {
 	Postgres *PostgresConfig `json:"postgres,omitempty"`
 	Server   *ServerConfig   `json:"server,omitempty"`
 }
 
 type PostgresConfig struct {
-	DBHost     string `json:"db_host"`
-    DBPort     string `json:"db_port"`
-    DBName     string `json:"db_name"`
-    SSLMode string `json:"SSLMode,omitempty"`
+	DBHost  string `json:"host"`
+	DBPort  string `json:"port"`
+	DBName  string `json:"DBName"`
+	SSLMode string `json:"SSLMode,omitempty"`
 }
 
 type ServerConfig struct {
 	Port string `json:"port,omitempty"`
 }
 
-func LoadConfig() *PostgresConfig {
-	file, err := os.Open(configFilePath);
-
+func LoadConfig() *Config {
+	file, err := os.Open("configs/config.json")
 	if err != nil {
-        panic(err)
-    }
-    defer file.Close()
+		panic(err)
+	}
+	defer file.Close()
 
 	decoder := json.NewDecoder(file)
-    config := PostgresConfig{}
-    err = decoder.Decode(&config)
-    if err != nil {
-        panic(err)
-    }
+	config := &Config{}
+	err = decoder.Decode(config)
+	if err != nil {
+		panic(err)
+	}
 
-    return &config
+	return config
 }

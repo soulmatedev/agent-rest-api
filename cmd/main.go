@@ -2,23 +2,27 @@ package main
 
 import (
 	"agent-rest-api/configs"
+	"agent-rest-api/controllers"
+	"agent-rest-api/handlers"
 	"agent-rest-api/models"
-
-	"github.com/gin-gonic/gin"
+	"agent-rest-api/repositories"
+	"agent-rest-api/services"
+	"log"
 )
 
 func main() {
 	env := models.LoadEnv()
 	c := configs.LoadConfig()
 
-	router := gin.Default()
-    api := router.Group("/api")
-    {
-        api.POST("/agents", agentController.CreateAgent)
-        api.PUT("/agents/:id", agentController.UpdateAgent)
-        api.DELETE("/agents/:id", agentController.DeleteAgent)
-        api.GET("/agents", agentController.GetAgents)
-    }
+	db, err := repositories.NewDatabase(env, c)
+	if err != nil {
+		log.Fatalf("Failed to initialize database: %s", err.Error())
+	}
 
-    router.Run()
+	repo := repositories.NewAgentRepository(db)
+	service := services.NewAgentService(repo)
+	controller := controllers.NewAgentController(service)
+
+	router := handlers.InitRoutes(controller)
+	router.Run(c.Postgres.DBHost + ":" + c.Server.Port)
 }
