@@ -37,9 +37,9 @@
 - Создайте базу данных agent-db.
 - Настройте параметры подключения в файле .env.local и config.json.
    #### .env.local
-  - POSTGRES_USER=postgres
-  - POSTGRES_PASSWORD=000123000
-  - DOMAIN=http://localhost:3000
+  - POSTGRES_USER=your_postgres_user
+  - POSTGRES_PASSWORD=your_postgres_password
+  - DOMAIN=http://localhost:3000 (пример)
    #### config.json
   {
     "postgres": {
