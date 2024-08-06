@@ -1,0 +1,5 @@
+# Переменные окружения
+.env.local
+
+# Конфиг
+configs/config.json
